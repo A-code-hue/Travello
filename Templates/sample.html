@@ -1,0 +1,141 @@
+{% load static %}
+{% load widget_tweaks %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Travello - Passenger Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="shortcut icon" href="{% static 'img/favicon.png' %}">
+
+    <style>
+        body {
+            font-family: 'Gotu', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            padding-top: 40px;
+            padding-bottom: 60px;
+        }
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+        }
+        h2 {
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <a class="navbar-brand" href="{% url 'index' %}"><strong>TRAVELLO</strong></a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link">Hello, {{ user.first_name }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                {% endif %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+                
+                                            <li><a href="{% url 'blog_list' %}">Blog</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<!-- Messages -->
+<div class="container mt-3">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<!-- Form -->
+<div class="container">
+    <div class="form-container">
+        <h2>Passenger Details</h2>
+
+        <form method="POST" action="{% url 'pessanger_detail_def' city_name=city_name %}">
+            {% csrf_token %}
+            {{ formset.management_form }}
+
+            <div id="formset-area">
+                {% for form in formset %}
+                <div class="form-row align-items-end mb-3">
+                    <div class="col-md-4">
+                        <label>First Name</label>
+                        {{ form.first_name|add_class:"form-control" }}
+                    </div>
+                    <div class="col-md-4">
+                        <label>Last Name</label>
+                        {{ form.last_name|add_class:"form-control" }}
+                    </div>
+                    <div class="col-md-2">
+                        <label>Age</label>
+                        {{ form.age|add_class:"form-control" }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group mt-4">
+                <label for="trip_date">Trip Date</label>
+                <input type="date" class="form-control w-25" name="trip_date" id="trip_date" required>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-success btn-lg">Submit</button>
+                <button type="button" class="btn btn-outline-primary ml-2" id="add-pessanger">Add New Passenger</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    let form_num = {{ formset.total_form_count|default:0 }};
+    $('#add-pessanger').click(function (e) {
+        e.preventDefault();
+        form_num++;
+
+        $('#id_form-TOTAL_FORMS').val(form_num + 1);
+
+        const newForm = `
+        <div class="form-row align-items-end mb-3">
+            <div class="col-md-4">
+                <label>First Name</label>
+                <input type="text" name="form-${form_num}-first_name" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label>Last Name</label>
+                <input type="text" name="form-${form_num}-last_name" class="form-control" required>
+            </div>
+            <div class="col-md-2">
+                <label>Age</label>
+                <input type="number" name="form-${form_num}-age" class="form-control" required>
+            </div>
+        </div>`;
+        $('#formset-area').append(newForm);
+    });
+</script>
+
+</body>
+</html>

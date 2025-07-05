@@ -1,0 +1,226 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>TRAVELLO</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.png' %}">
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/gijgo.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'css/slick.css' %}">
+    <link rel="stylesheet" href="{% static 'css/slicknav.css' %}">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+        <p class="browserupgrade">
+            You are using an <strong>outdated</strong> browser. Please 
+            <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.
+        </p>
+    <![endif]-->
+
+    <!-- header-start -->
+    <header>
+        <div class="header-area">
+            <div id="sticky-header" class="main-header-area">
+                <div class="container-fluid">
+                    <div class="header_bottom_border">
+                        <div class="row align-items-center">
+                            <div class="col-xl-2 col-lg-2">
+                                <div class="logo">
+                                    <a href="{% url 'index' %}">
+                                        <h1>TRAVELLO</h1>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6">
+                                <div class="main-menu d-none d-lg-block">
+                                    <nav>
+                                        <ul id="navigation">
+                                            <li><a class="active" href="{% url 'index' %}">home</a></li>
+                                            <li><a href="{% url 'about' %}">About</a></li>
+                                            {% if user.is_authenticated %}
+                                                <li>Hello, {{ user.first_name }}</li>
+                                                <li><a href="{% url 'logout' %}">logout</a></li>
+                                            {% else %}
+                                                <li><a href="{% url 'login' %}">Login</a></li>
+                                                <li><a href="{% url 'register' %}">Register</a></li>
+                                            {% endif %}
+                                            <li><a href="{% url 'contact' %}">Contact</a></li>
+                                            <li><a href="{% url 'blog_list' %}">Blog</a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mobile_menu d-block d-lg-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- header-end -->
+
+    <div class="destination_banner_wrap overlay">
+        <div class="destination_text text-center">
+            <h3>{{ dest.destination.name }}</h3>
+        </div>
+    </div>
+
+    <div class="destination_details_info">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-9">
+                    <div class="destination_info">
+                        <h3>Description</h3>
+                        <p>{{ dest.desc }}</p>
+
+                        <div class="single_destination">
+                            <h4>Day-01</h4>
+                            <p>{{ dest.day1 }}</p>
+                        </div>
+                        <div class="single_destination">
+                            <h4>Day-02</h4>
+                            <p>{{ dest.day2 }}</p>
+                        </div>
+                        {% if dest.day3 %}
+                        <div class="single_destination">
+                            <h4>Day-03</h4>
+                            <p>{{ dest.day3 }}</p>
+                        </div>
+                        {% endif %}
+                        {% if dest.day4 %}
+                        <div class="single_destination">
+                            <h4>Day-04</h4>
+                            <p>{{ dest.day4 }}</p>
+                        </div>
+                        {% endif %}
+                        {% if dest.day5 %}
+                        <div class="single_destination">
+                            <h4>Day-05</h4>
+                            <p>{{ dest.day5 }}</p>
+                        </div>
+                        {% endif %}
+                        {% if dest.day6 %}
+                        <div class="single_destination">
+                            <h4>Day-06</h4>
+                            <p>{{ dest.day6 }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="bordered_1px"></div>
+
+                    <div class="contact_join">
+                        <h3>Book Now!!</h3>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="submit_btn">
+                                    <!-- Use the url tag to build booking link, assuming the URL name is 'pessanger_detail_def' and expects 'destination_name' -->
+<button class="boxed-btn4" type="button" onclick="window.location.href='{% url 'pessanger_detail_def' city_name=dest.destination.name %}'">Book Here</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Back to destination list link -->
+                    <a href="{% url 'destination_list' city=dest.destination.city.name %}" class="btn btn-secondary mt-4">&larr; Back to {{ dest.destination.city.name }} Destinations</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- footer -->
+    <footer class="footer">
+        <div class="footer_top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-4 col-md-6 col-lg-4 ">
+                        <div class="footer_widget">
+                            <a href="{% url 'index' %}">
+                                <h1>TRAVELLO</h1>
+                            </a>
+                            <p><br> Balkumari-Lalitpur <br>
+                                <a href="#">9845000000</a> <br>
+                                <a href="#">TRAVELLO@gmail.com</a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-md-6 col-lg-2">
+                        <div class="footer_widget">
+                            <h3 class="footer_title">TRAVELLO</h3>
+                            <ul class="links">
+                                <li><a href="{% url 'about' %}">About</a></li>
+                                <li><a href="{% url 'contact' %}">Contact</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 col-lg-3">
+                        <div class="footer_widget">
+                            <h3 class="footer_title">Popular destination</h3>
+                            <ul class="links double_links">
+                                <li><a href="#">Kathmandu</a></li>
+                                <li><a href="#">Pokhara</a></li>
+                                <li><a href="#">Mustang</a></li>
+                                <li><a href="#">Janakpur</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS scripts -->
+    <script src="{% static 'js/vendor/modernizr-3.5.0.min.js' %}"></script>
+    <script src="{% static 'js/vendor/jquery-1.12.4.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'js/ajax-form.js' %}"></script>
+    <script src="{% static 'js/waypoints.min.js' %}"></script>
+    <script src="{% static 'js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'js/imagesloaded.pkgd.min.js' %}"></script>
+    <script src="{% static 'js/scrollIt.js' %}"></script>
+    <script src="{% static 'js/jquery.scrollUp.min.js' %}"></script>
+    <script src="{% static 'js/wow.min.js' %}"></script>
+    <script src="{% static 'js/nice-select.min.js' %}"></script>
+    <script src="{% static 'js/jquery.slicknav.min.js' %}"></script>
+    <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <script src="{% static 'js/gijgo.min.js' %}"></script>
+    <script src="{% static 'js/slick.min.js' %}"></script>
+
+    <script src="{% static 'js/contact.js' %}"></script>
+    <script src="{% static 'js/jquery.ajaxchimp.min.js' %}"></script>
+    <script src="{% static 'js/jquery.form.js' %}"></script>
+    <script src="{% static 'js/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'js/mail-script.js' %}"></script>
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>

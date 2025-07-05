@@ -1,0 +1,222 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>TRAVELLO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="{% static 'img/favicon.png' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <!-- ========== HEADER ========== -->
+    <header>
+        <div class="header-area">
+            <div id="sticky-header" class="main-header-area">
+                <div class="container-fluid">
+                    <div class="header_bottom_border">
+                        <div class="row align-items-center">
+                            <div class="col-xl-2 col-lg-2">
+                                <div class="logo">
+                                    <a href="{% url 'index' %}"><h1>TRAVELLO</h1></a>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6">
+                                <div class="main-menu d-none d-lg-block">
+                                    <nav>
+                                        <ul id="navigation">
+                                            <li><a class="active" href="{% url 'index' %}">Home</a></li>
+                                            <li><a href="{% url 'about' %}">About</a></li>
+                                            {% if user.is_authenticated %}
+                                                <li>Hello, {{ user.first_name }}</li>
+                                                <li><a href="{% url 'logout' %}">Logout</a></li>
+                                            {% else %}
+                                                <li><a href="{% url 'login' %}">Login</a></li>
+                                                <li><a href="{% url 'register' %}">Register</a></li>
+                                            {% endif %}
+                                            <li><a href="{% url 'contact' %}">Contact</a></li>
+                                            <li><a href="{% url 'blog_list' %}">Blog</a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mobile_menu d-block d-lg-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========== BANNER ========== -->
+    <div class="destination_banner_wrap overlay">
+        <div class="destination_text text-center">
+            <h3>Welcome to Travello</h3>
+            <h3>Explore Nepal’s Most Beautiful Cities</h3>
+        </div>
+    </div>
+
+    <!-- ========== CITY LISTING ========== -->
+        <h3 class="text-center mb-4 mt-5">Explore Cities</h3>
+    <div class="container py-5">
+        <div class="row">
+            {% for city in cities %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="single_destination text-center">
+                        {% if city.image %}
+                            <div class="thumb mb-3">
+                                <img src="{{ city.image.url }}" alt="{{ city.name }}" class="img-fluid rounded">
+                            </div>
+                        {% endif %}
+                        <h4>{{ city.name }}</h4>
+                        <a href="{% url 'destination_list' city=city.name %}" class="boxed-btn4 mt-2">Explore {{ city.name }}</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- ========== DESTINATIONS LISTING ========== -->
+        <h3 class="text-center mb-4 mt-5">Explore Places</h3>
+        <div class="row">
+            {% for dest in dests %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="single_destination text-center">
+                        <div class="thumb mb-3">
+                            <img src="{{ dest.img1.url }}" alt="{{ dest.name }}" class="img-fluid rounded">
+                        </div>
+                        <h4>{{ dest.name }}</h4>
+                        <a href="{% url 'destination_details' destination_name=dest.name %}" class="boxed-btn4 mt-2">Explore {{ dest.name }}</a>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- ========== RECOMMENDATION FORM ========== -->
+        <h3 class="text-center mb-4 mt-5">Recommended For You</h3>
+        <div class="where_togo_area my-5">
+            <div class="row align-items-center">
+                <div class="col-lg-3">
+                    <div class="form_area">
+                        <h3>Where you want to go?</h3>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="search_wrap">
+                        <form action="{% url 'recommendations' %}" method="post">
+                            {% csrf_token %}
+                            <label for="preference">Enter your preference (e.g., Adventure, Scenic):</label>
+                            <input type="text" id="preference" name="preference" class="form-control" placeholder="Type your preference here">
+                            <button type="submit" class="boxed-btn4 mt-2">Get Recommendations</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+<!-- newsletter area -->
+<div class="newletter_area overlay">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-10">
+                <div class="row align-items-center">
+                    <div class="col-lg-5">
+                        <div class="newsletter_text">
+                            <h4>Subscribe Our Newsletter</h4>
+                            <p>Subscribe newsletter to get offers and about new places to discover.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <form action="{% url 'subscribe_newsletter' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="mail_form">
+                                <div class="row no-gutters">
+                                    <div class="col-lg-9 col-md-8">
+                                        <div class="newsletter_field">
+                                            <input type="email" name="email" placeholder="Your mail" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-4">
+                                        <div class="newsletter_btn">
+                                            <button class="boxed-btn4" type="submit">Subscribe</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        {% if messages %}
+                            <div style="margin-top: 10px;">
+                                {% for message in messages %}
+                                    <div>{{ message }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Footer Start -->
+    <footer class="footer">
+        <div class="footer_top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-4 col-md-6 col-lg-4">
+                        <div class="footer_widget">
+                            <a href="{% url 'index' %}">
+                                <h1>TRAVELLO</h1>
+                            </a>
+                            <p><br> Balkumari, Lalitpur <br>
+                                <a href="tel:+9779845000000">9845000000</a> <br>
+                                <a href="mailto:Travello@gmail.com">Travello@gmail.com</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-6 col-lg-2">
+                        <div class="footer_widget">
+                            <h3 class="footer_title">Travello</h3>
+                            <ul class="links">
+                                <li><a href="{% url 'about' %}">About</a></li>
+                                <li><a href="{% url 'contact' %}">Contact</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 col-lg-3">
+                        <div class="footer_widget">
+                            <h3 class="footer_title">Popular Destinations</h3>
+                            <ul class="links double_links">
+                                <li><a href="#">Kathmandu</a></li>
+                                <li><a href="#">Pokhara</a></li>
+                                <li><a href="#">Mustang</a></li>
+                                <li><a href="#">Janakpur</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer End -->
+
+    <!-- ========== JS FILES ========== -->
+    <script src="{% static 'js/vendor/jquery-1.12.4.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+
+</html>
