@@ -42,7 +42,7 @@ def register(request):
     if request.method == 'POST':
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
-        username = request.POST['username']
+        username = request.POST['username'] 
         email = request.POST['email']
         password1 = request.POST['password1']
         password2 = request.POST['password2']
@@ -112,7 +112,7 @@ def destination_details(request, destination_name):
 class KeyValueForm(forms.Form):
     first_name = forms.CharField()
     last_name = forms.CharField()
-    age = forms.IntegerField()
+    age = forms.IntegerField(min_value=1, max_value=100)
 
 
 def pessanger_detail_def(request, city_name):

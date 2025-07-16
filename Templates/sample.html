@@ -51,8 +51,7 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
                 {% endif %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
-                
-                                            <li><a href="{% url 'blog_list' %}">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'blog_list' %}">Blog</a></li>
             </ul>
         </div>
     </nav>
@@ -97,7 +96,7 @@
 
             <div class="form-group mt-4">
                 <label for="trip_date">Trip Date</label>
-                <input type="date" class="form-control w-25" name="trip_date" id="trip_date" required>
+                <input type="date" class="form-control w-25" name="trip_date" id="trip_date" required min="">
             </div>
 
             <div class="mt-4">
@@ -111,11 +110,18 @@
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    // Set today's date as min for date input
+    document.addEventListener('DOMContentLoaded', function () {
+        const dateInput = document.getElementById('trip_date');
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.setAttribute('min', today);
+    });
+
+    // Add passenger dynamically
     let form_num = {{ formset.total_form_count|default:0 }};
     $('#add-pessanger').click(function (e) {
         e.preventDefault();
         form_num++;
-
         $('#id_form-TOTAL_FORMS').val(form_num + 1);
 
         const newForm = `
@@ -130,7 +136,7 @@
             </div>
             <div class="col-md-2">
                 <label>Age</label>
-                <input type="number" name="form-${form_num}-age" class="form-control" required>
+                <input type="number" name="form-${form_num}-age" class="form-control" min="1" max="100" required>
             </div>
         </div>`;
         $('#formset-area').append(newForm);
