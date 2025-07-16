@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Destinations</h2>
+    <a href="{% url 'admin_destination_create' %}" class="btn btn-success mb-3">Add New</a>
+    <table class="table table-bordered">
+        <thead><tr><th>ID</th><th>Name</th><th>City</th><th>Actions</th></tr></thead>
+        <tbody>
+            {% for dest in destinations %}
+            <tr>
+                <td>{{ dest.id }}</td>
+                <td>{{ dest.name }}</td>
+                <td>{{ dest.city }}</td>
+                <td>
+                    <a href="{% url 'admin_destination_edit' dest.id %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'admin_destination_delete' dest.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">No destinations found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

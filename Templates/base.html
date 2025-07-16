@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Admin Panel{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Optional Custom CSS -->
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+        }
+        .sidebar {
+            width: 240px;
+            background-color: #343a40;
+            padding-top: 60px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            color: white;
+        }
+        .sidebar .nav-link {
+            color: #adb5bd;
+        }
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: #495057;
+            color: white;
+        }
+        .content {
+            margin-left: 240px;
+            padding: 20px;
+            flex-grow: 1;
+            background-color: #f8f9fa;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar d-flex flex-column position-fixed">
+    <div class="text-center py-3 border-bottom">
+        <h5>Admin Panel</h5>
+    </div>
+    <nav class="nav flex-column px-3">
+        <a class="nav-link {% if request.path == '/admin-panel/' %}active{% endif %}" href="{% url 'admin_dashboard' %}">Dashboard</a>
+        <a class="nav-link {% if 'destinations' in request.path %}active{% endif %}" href="{% url 'admin_destination_list' %}">Destinations</a>
+        <!-- You can add more links for other CRUD sections -->
+        <a class="nav-link" href="/">Back to Site</a>
+        {% if request.user.is_authenticated %}
+        <a class="nav-link text-danger" href="{% url 'logout' %}">Logout ({{ request.user.username }})</a>
+        {% endif %}
+    </nav>
+</div>
+
+<!-- Main Content -->
+<div class="content">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

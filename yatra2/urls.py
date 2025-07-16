@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', include('yatra.urls')),
+    path('admin-panel/', include('adminpanel.urls')),
     path('admin/', admin.site.urls),
 ]
 
