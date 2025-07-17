@@ -1,97 +1,67 @@
 {% extends "main_base.html" %}
 {% load widget_tweaks %}
 
-{% block title %}Travello - Passenger Form{% endblock %}
-
 {% block content %}
 <div class="container mt-4 mb-5">
     <div class="form-container p-4 bg-white rounded shadow-sm">
-        <h2>Passenger Details</h2>
+        <h2>Passenger Details for {{ city_name }}</h2>
 
-        <!-- Messages -->
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-
-        <form method="POST" action="{% url 'pessanger_detail_def' city_name=city_name %}">
+        <form method="POST" id="passengerForm">
             {% csrf_token %}
             {{ formset.management_form }}
 
-            <div id="formset-area">
+            <div class="form-group mt-4">
+                <label for="num_passengers">Number of Passengers:</label>
+                <input type="number" id="num_passengers" name="num_passengers" 
+                       class="form-control w-25" min="1" max="10" 
+                       value="{{ num_passengers }}" required>
+            </div>
+
+            <div id="passenger-forms">
                 {% for form in formset %}
-                <div class="form-row align-items-end mb-3">
-                    <div class="col-md-4">
-                        <label for="{{ form.first_name.id_for_label }}">First Name</label>
-                        {{ form.first_name|add_class:"form-control" }}
-                    </div>
-                    <div class="col-md-4">
-                        <label for="{{ form.last_name.id_for_label }}">Last Name</label>
-                        {{ form.last_name|add_class:"form-control" }}
-                    </div>
-                    <div class="col-md-2">
-                        <label for="{{ form.age.id_for_label }}">Age</label>
-                        {{ form.age|add_class:"form-control" }}
+                <div class="passenger-form mb-4 p-3 border rounded">
+                    <h5>Passenger {{ forloop.counter }}</h5>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>First Name</label>
+                            {{ form.first_name|add_class:"form-control"|attr:"required" }}
+                        </div>
+                        <div class="col-md-4">
+                            <label>Last Name</label>
+                            {{ form.last_name|add_class:"form-control"|attr:"required" }}
+                        </div>
+                        <div class="col-md-4">
+                            <label>Age</label>
+                            {{ form.age|add_class:"form-control"|attr:"required" }}
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
             </div>
 
             <div class="form-group mt-4">
-                <label for="trip_date">Trip Date</label>
-                <input type="date" class="form-control w-25" name="trip_date" id="trip_date" required min="">
+                <label for="trip_date">Trip Date:</label>
+                <input type="date" class="form-control w-25" name="trip_date" 
+                       id="trip_date" required min="{{ today }}">
             </div>
 
-            <div class="mt-4">
-                <button type="submit" class="btn btn-success btn-lg">Submit</button>
-                <button type="button" class="btn btn-outline-primary ml-2" id="add-pessanger">Add New Passenger</button>
-            </div>
+            <button type="submit" class="btn btn-primary mt-3">Continue to Payment</button>
         </form>
     </div>
 </div>
-{% endblock content %}
 
-{% block scripts %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    // Set today's date as min for date input
-    document.addEventListener('DOMContentLoaded', function () {
-        const dateInput = document.getElementById('trip_date');
-        const today = new Date().toISOString().split('T')[0];
-        dateInput.setAttribute('min', today);
+document.addEventListener('DOMContentLoaded', function() {
+    // Update form when passenger count changes
+    const numPassengersInput = document.getElementById('num_passengers');
+    numPassengersInput.addEventListener('change', function() {
+        const newCount = Math.min(10, Math.max(1, this.value));
+        window.location.href = `?num_passengers=${newCount}`;
     });
 
-    // Add passenger dynamically
-    $(function() {
-        let form_num = parseInt($('#id_form-TOTAL_FORMS').val()) || 0;
-
-        $('#add-pessanger').click(function (e) {
-            e.preventDefault();
-
-            const newFormNum = form_num;
-
-            const newForm = `
-            <div class="form-row align-items-end mb-3">
-                <div class="col-md-4">
-                    <label for="id_form-${newFormNum}-first_name">First Name</label>
-                    <input type="text" name="form-${newFormNum}-first_name" class="form-control" required id="id_form-${newFormNum}-first_name">
-                </div>
-                <div class="col-md-4">
-                    <label for="id_form-${newFormNum}-last_name">Last Name</label>
-                    <input type="text" name="form-${newFormNum}-last_name" class="form-control" required id="id_form-${newFormNum}-last_name">
-                </div>
-                <div class="col-md-2">
-                    <label for="id_form-${newFormNum}-age">Age</label>
-                    <input type="number" name="form-${newFormNum}-age" class="form-control" min="1" max="100" required id="id_form-${newFormNum}-age">
-                </div>
-            </div>`;
-
-            $('#formset-area').append(newForm);
-
-            form_num++;
-            $('#id_form-TOTAL_FORMS').val(form_num);
-        });
-    });
+    // Set min date to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('trip_date').min = today;
+});
 </script>
-{% endblock scripts %}
+{% endblock %}

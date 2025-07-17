@@ -108,20 +108,26 @@ def destination_details(request, destination_name):
     request.session['destination_name'] = destination_name
     return render(request, 'destination_details.html', {'dest': dest})
 
-
+# Form class for each passenger
 class KeyValueForm(forms.Form):
     first_name = forms.CharField()
     last_name = forms.CharField()
     age = forms.IntegerField(min_value=1, max_value=100)
 
-
+# Passenger detail submission view
+@login_required
 def pessanger_detail_def(request, city_name):
-    KeyValueFormSet = formset_factory(KeyValueForm, extra=1)
+    # Get passenger count from GET or default to 1
+    num_passengers = int(request.GET.get('num_passengers', 1))
+    
+    KeyValueFormSet = formset_factory(KeyValueForm, extra=0, min_num=1, validate_min=True)
 
     if request.method == 'POST':
         formset = KeyValueFormSet(request.POST)
-        if formset.is_valid():
-            trip_date = datetime.strptime(request.POST['trip_date'], "%Y-%m-%d").date()
+        trip_date_str = request.POST.get('trip_date')
+
+        if formset.is_valid() and trip_date_str:
+            trip_date = datetime.strptime(trip_date_str, "%Y-%m-%d").date()
             if trip_date < datetime.now().date():
                 return redirect('index')
 
@@ -131,11 +137,14 @@ def pessanger_detail_def(request, city_name):
                 return redirect('index')
 
             trip_same_id = obj.trip_same_id
-            request.session['Trip_same_id'] = trip_same_id
             price = request.session.get('price', 20000)
             city = request.session.get('city', city_name)
             user = request.user
 
+            # Get ACTUAL number of submitted forms
+            actual_passengers = formset.total_form_count()
+            
+            # Store all passenger details
             for form in formset:
                 PassengerDetail.objects.create(
                     trip_same_id=trip_same_id,
@@ -145,31 +154,50 @@ def pessanger_detail_def(request, city_name):
                     trip_date=trip_date,
                     payment=price,
                     user=user,
-                    city=city
+                    city=city,
+                    num_passengers=actual_passengers  # Store actual count
                 )
 
+            # Update trip ID
             obj.trip_same_id += 1
             obj.save()
 
-            total_passengers = formset.total_form_count()
-            total_price = total_passengers * price
+            # Calculate payment details
+            total_price = actual_passengers * price
             gst = round(total_price * 0.13, 2)
             final_amount = total_price + gst
 
-            request.session['pay_amount'] = final_amount
+            # Store ALL payment details in session
+            request.session.update({
+                'Trip_same_id': trip_same_id,
+                'pay_amount': final_amount,
+                'no_of_person': actual_passengers,
+                'per_person_price': price,
+                'total_before_tax': total_price,
+                'gst_amount': gst,
+                'final_amount': final_amount
+            })
 
             return render(request, 'payment.html', {
-                'no_of_person': total_passengers,
+                'no_of_person': actual_passengers,
                 'price1': total_price,
                 'GST': gst,
                 'final_total': final_amount,
-                'city': city
+                'city': city,
+                'Trip_id': trip_same_id
             })
-
     else:
-        formset = KeyValueFormSet()
+        # For GET requests, create forms for the requested number of passengers
+        formset = KeyValueFormSet(initial=[{} for _ in range(num_passengers)])
 
-    return render(request, 'sample.html', {'formset': formset, 'city_name': city_name})
+    context = {
+        'formset': formset,
+        'city_name': city_name,
+        'num_passengers': num_passengers,
+        'today': datetime.now().date().isoformat(),
+    }
+    return render(request, 'sample.html', context)
+
 
 
 # Contact Form Submission
@@ -232,58 +260,82 @@ def initiate_payment(request):
     response_data = response.json()
     return redirect(response_data.get('payment_url', '/'))
 
+# Payment verification & summary
 @csrf_exempt
 @login_required(login_url='login')
 def verify_payment(request):
     if request.method == 'GET':
         pidx = request.GET.get('pidx')
-        print(f"[verify_payment] Payment verification started with pidx={pidx}")
+        if not pidx:
+            messages.error(request, "Payment ID missing.")
+            return redirect('index')
 
+        print(f"[verify_payment] Starting verification for pidx={pidx}")
+
+        # Khalti payment verification endpoint
         url = "https://a.khalti.com/api/v2/epayment/lookup/"
         headers = {
-            'Authorization': 'key a870cce9f5cf4c8d812c9d30c6149d2d',  # Make sure this is your valid secret key
+            'Authorization': 'key a870cce9f5cf4c8d812c9d30c6149d2d',
             'Content-Type': 'application/json',
         }
         data = json.dumps({'pidx': pidx})
-        res = requests.post(url, headers=headers, data=data)
-        new_res = res.json()
-        print(f"[verify_payment] Khalti lookup response: {new_res}")
 
-        if new_res.get('status') == 'Completed':
+        try:
+            res = requests.post(url, headers=headers, data=data)
+            res.raise_for_status()
+        except requests.RequestException as e:
+            print(f"[verify_payment] Error contacting Khalti API: {e}")
+            messages.error(request, "Error verifying payment with Khalti.")
+            return redirect('index')
+
+        response_data = res.json()
+        print(f"[verify_payment] Khalti response: {response_data}")
+
+        if response_data.get('status') == 'Completed':
             username = request.user.get_username()
             trip_same_id = request.session.get('Trip_same_id')
             pay_amount = request.session.get('pay_amount')
+            no_of_passengers = request.session.get('no_of_person')
 
-            print(f"[verify_payment] Session Data - username: {username}, trip_same_id: {trip_same_id}, pay_amount: {pay_amount}")
-
-            if not trip_same_id or not pay_amount:
-                print("[verify_payment] Missing trip_same_id or pay_amount in session. Cannot create transaction.")
-                messages.error(request, "Session expired or invalid payment details.")
+            # Validate session data
+            if not all([trip_same_id, pay_amount, no_of_passengers]):
+                print("[verify_payment] Missing required session data for payment.")
+                messages.error(request, "Session expired or payment details missing.")
                 return redirect('index')
 
-            amount_str = str(pay_amount)
-
+            # Create transaction record
+            from yatra.models import Transaction  # Adjust import as needed
             Transaction.objects.create(
                 username=username,
                 trip_same_id=trip_same_id,
-                amount=amount_str,
+                amount=str(pay_amount),
                 payment_method='Khalti',
                 status='Successful'
             )
-            print("[verify_payment] Transaction created successfully.")
+            print("[verify_payment] Transaction saved successfully.")
 
-            # Do NOT update pay_done since field does not exist
+            # Calculate GST and subtotal
+            gst = round(pay_amount * 0.13 / 1.13, 2)
+            subtotal = pay_amount - gst
+            per_person_price = round(pay_amount / no_of_passengers, 2)
 
-            # Render a payment success page instead of redirecting immediately
             return render(request, 'payment_success.html', {
-                'amount': amount_str,
+                'amount': pay_amount,
                 'trip_id': trip_same_id,
                 'username': username,
+                'no_of_passengers': no_of_passengers,
+                'per_person_price': per_person_price,
+                'gst': gst,
+                'subtotal': subtotal,
             })
         else:
-            print(f"[verify_payment] Payment not completed or failed. Status: {new_res.get('status')}")
+            print(f"[verify_payment] Payment not completed. Status: {response_data.get('status')}")
             messages.error(request, "Payment verification failed or incomplete.")
             return redirect('index')
+
+    # If not GET, redirect to home or show error
+    messages.error(request, "Invalid request method.")
+    return redirect('index')
 
 
 # User's Booked Trips (History)

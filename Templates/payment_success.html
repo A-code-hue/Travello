@@ -11,7 +11,6 @@
             padding: 30px;
             color: #333;
         }
-
         .invoice-box {
             max-width: 700px;
             margin: auto;
@@ -20,24 +19,20 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.15);
         }
-
         .invoice-box h1 {
             color: #28a745;
             font-size: 28px;
             text-align: center;
             margin-bottom: 20px;
         }
-
         .company-info, .customer-info, .payment-info {
             margin-bottom: 25px;
         }
-
         .label {
             font-weight: bold;
             width: 160px;
             display: inline-block;
         }
-
         .section-title {
             font-size: 18px;
             margin-bottom: 10px;
@@ -45,7 +40,6 @@
             border-bottom: 1px solid #ddd;
             padding-bottom: 5px;
         }
-
         .success-stamp {
             color: white;
             background-color: #28a745;
@@ -55,7 +49,6 @@
             font-size: 16px;
             margin-top: 10px;
         }
-
         .back-btn, .print-btn {
             margin-top: 30px;
             padding: 10px 20px;
@@ -67,31 +60,23 @@
             cursor: pointer;
             text-decoration: none;
         }
-
         .back-btn:hover, .print-btn:hover {
             background: #0056b3;
         }
-
         .print-btn {
             background: #6c757d;
             margin-left: 10px;
         }
-
         @media print {
-            .back-btn, .print-btn {
-                display: none;
-            }
-            body {
-                background: white;
-            }
+            .back-btn, .print-btn { display: none; }
+            body { background: white; }
         }
+        .amount { text-align: right; }
     </style>
 </head>
 <body>
- 
     <div class="invoice-box">
         <h1>Payment Invoice</h1>
-
         <div class="success-stamp">Payment Completed</div>
 
         <div class="company-info">
@@ -105,19 +90,22 @@
             <div class="section-title">Customer Info</div>
             <p><span class="label">Name:</span> {{ username }}</p>
             <p><span class="label">Trip ID:</span> {{ trip_id }}</p>
+            <p><span class="label">Date:</span> {% now "F j, Y - h:i A" %}</p>
         </div>
 
         <div class="payment-info">
             <div class="section-title">Payment Details</div>
-            <p><span class="label">Amount Paid:</span> Rs. {{ amount }}</p>
+            <p><span class="label">Number of Passengers:</span> {{ no_of_passengers }}</p>
+            <p><span class="label">Per Person Price:</span> Rs. {{ per_person_price|floatformat:2 }}</p>
+            <p><span class="label">Subtotal:</span> Rs. {{ subtotal|floatformat:2 }}</p>
+            <p><span class="label">GST (13%):</span> Rs. {{ gst|floatformat:2 }}</p>
+            <p><span class="label">Total Paid:</span> Rs. {{ amount|floatformat:2 }}</p>
             <p><span class="label">Payment Method:</span> Khalti</p>
             <p><span class="label">Status:</span> Successful</p>
-            <p><span class="label">Date:</span> {% now "F j, Y - h:i A" %}</p>
         </div>
 
         <a href="{% url 'index' %}" class="back-btn">Return to Home</a>
         <button class="print-btn" onclick="window.print()">Print Invoice</button>
     </div>
-
 </body>
 </html>

@@ -40,6 +40,11 @@ TRAVELLO - Destinations in {{ city }}
                                 <div class="days">
                                     <i class="fa fa-clock-o"></i> {{ dest.days }} Days
                                 </div>
+                                <!-- Explore Button -->
+                                <a href="{% url 'destination_details' destination_name=dest.destination.name %}" 
+                                   class="btn btn-sm btn-primary mt-3">
+                                    Explore
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -52,4 +57,29 @@ TRAVELLO - Destinations in {{ city }}
         </div>
     </div>
 </div>
+
+<!-- Optional CSS styling -->
+<style>
+.btn {
+    display: inline-block;
+    font-weight: 600;
+    color: white;
+    background-color: #007bff;
+    border-radius: 4px;
+    padding: 6px 12px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.btn-sm {
+    padding: 4px 10px;
+    font-size: 0.8rem;
+}
+</style>
+
 {% endblock content %}

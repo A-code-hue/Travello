@@ -58,6 +58,7 @@ class PassengerDetail(models.Model):
     payment = models.DecimalField(max_digits=10, decimal_places=2)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     city = models.CharField(max_length=100)
+    num_passengers = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

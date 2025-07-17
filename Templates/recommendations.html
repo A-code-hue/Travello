@@ -3,21 +3,60 @@
 {% block title %}Tour Recommendations{% endblock %}
 
 {% block content %}
-<h1><center> Tour Recommendations</center></h1>
+<style>
+  table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  th, td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+
+  th {
+    background-color: #4CAF50;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  h1 {
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 40px;
+    color: #333;
+  }
+</style>
+
+<h1>Tour Recommendations</h1>
+
 <table>
+  <thead>
     <tr>
-        <th>Name</th>
-        <th>Days</th>
-        <th>Description</th>
-        <th>Price</th>
+      <th>Name</th>
+      <th>Days</th>
+      <th>Description</th>
+      <th>Price</th>
     </tr>
+  </thead>
+  <tbody>
     {% for recommendation in recommendations %}
     <tr>
-        <td>{{ recommendation.name }}</td>
-        <td>{{ recommendation.days }}</td>
-        <td>{{ recommendation.desc }}</td>
-        <td>{{ recommendation.price }}</td>
+      <td>{{ recommendation.name }}</td>
+      <td>{{ recommendation.days }}</td>
+      <td>{{ recommendation.desc }}</td>
+      <td>{{ recommendation.price }}</td>
     </tr>
     {% endfor %}
+  </tbody>
 </table>
 {% endblock %}
