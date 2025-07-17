@@ -1,75 +1,19 @@
-{% load static %}
+{% extends "main_base.html" %}
 {% load widget_tweaks %}
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Travello - Passenger Form</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="shortcut icon" href="{% static 'img/favicon.png' %}">
+{% block title %}Travello - Passenger Form{% endblock %}
 
-    <style>
-        body {
-            font-family: 'Gotu', sans-serif;
-            background-color: #f8f9fa;
-        }
-        .container {
-            padding-top: 40px;
-            padding-bottom: 60px;
-        }
-        .form-container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
-        }
-        h2 {
-            font-weight: bold;
-            margin-bottom: 25px;
-        }
-    </style>
-</head>
-<body>
-
-<!-- Header -->
-<header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-        <a class="navbar-brand" href="{% url 'index' %}"><strong>TRAVELLO</strong></a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
-                {% if user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link">Hello, {{ user.first_name }}</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
-                {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
-                {% endif %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'blog_list' %}">Blog</a></li>
-            </ul>
-        </div>
-    </nav>
-</header>
-
-<!-- Messages -->
-<div class="container mt-3">
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
-</div>
-
-<!-- Form -->
-<div class="container">
-    <div class="form-container">
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="form-container p-4 bg-white rounded shadow-sm">
         <h2>Passenger Details</h2>
+
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
 
         <form method="POST" action="{% url 'pessanger_detail_def' city_name=city_name %}">
             {% csrf_token %}
@@ -79,15 +23,15 @@
                 {% for form in formset %}
                 <div class="form-row align-items-end mb-3">
                     <div class="col-md-4">
-                        <label>First Name</label>
+                        <label for="{{ form.first_name.id_for_label }}">First Name</label>
                         {{ form.first_name|add_class:"form-control" }}
                     </div>
                     <div class="col-md-4">
-                        <label>Last Name</label>
+                        <label for="{{ form.last_name.id_for_label }}">Last Name</label>
                         {{ form.last_name|add_class:"form-control" }}
                     </div>
                     <div class="col-md-2">
-                        <label>Age</label>
+                        <label for="{{ form.age.id_for_label }}">Age</label>
                         {{ form.age|add_class:"form-control" }}
                     </div>
                 </div>
@@ -106,8 +50,9 @@
         </form>
     </div>
 </div>
+{% endblock content %}
 
-<!-- Scripts -->
+{% block scripts %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     // Set today's date as min for date input
@@ -118,30 +63,35 @@
     });
 
     // Add passenger dynamically
-    let form_num = {{ formset.total_form_count|default:0 }};
-    $('#add-pessanger').click(function (e) {
-        e.preventDefault();
-        form_num++;
-        $('#id_form-TOTAL_FORMS').val(form_num + 1);
+    $(function() {
+        let form_num = parseInt($('#id_form-TOTAL_FORMS').val()) || 0;
 
-        const newForm = `
-        <div class="form-row align-items-end mb-3">
-            <div class="col-md-4">
-                <label>First Name</label>
-                <input type="text" name="form-${form_num}-first_name" class="form-control" required>
-            </div>
-            <div class="col-md-4">
-                <label>Last Name</label>
-                <input type="text" name="form-${form_num}-last_name" class="form-control" required>
-            </div>
-            <div class="col-md-2">
-                <label>Age</label>
-                <input type="number" name="form-${form_num}-age" class="form-control" min="1" max="100" required>
-            </div>
-        </div>`;
-        $('#formset-area').append(newForm);
+        $('#add-pessanger').click(function (e) {
+            e.preventDefault();
+
+            const newFormNum = form_num;
+
+            const newForm = `
+            <div class="form-row align-items-end mb-3">
+                <div class="col-md-4">
+                    <label for="id_form-${newFormNum}-first_name">First Name</label>
+                    <input type="text" name="form-${newFormNum}-first_name" class="form-control" required id="id_form-${newFormNum}-first_name">
+                </div>
+                <div class="col-md-4">
+                    <label for="id_form-${newFormNum}-last_name">Last Name</label>
+                    <input type="text" name="form-${newFormNum}-last_name" class="form-control" required id="id_form-${newFormNum}-last_name">
+                </div>
+                <div class="col-md-2">
+                    <label for="id_form-${newFormNum}-age">Age</label>
+                    <input type="number" name="form-${newFormNum}-age" class="form-control" min="1" max="100" required id="id_form-${newFormNum}-age">
+                </div>
+            </div>`;
+
+            $('#formset-area').append(newForm);
+
+            form_num++;
+            $('#id_form-TOTAL_FORMS').val(form_num);
+        });
     });
 </script>
-
-</body>
-</html>
+{% endblock scripts %}

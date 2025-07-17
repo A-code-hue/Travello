@@ -1,160 +1,147 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - TRAVELLO</title>
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: #f4f4f4;
-        }
+{% extends "main_base.html" %}
 
-        .about-us {
-            background-image: url('https://www.w3schools.com/w3images/forestbridge.jpg');
-            background-size: cover;
-            background-position: center;
-            color: #fff;
-            text-align: center;
-            padding: 50px 0;
-        }
+{% block title %}About Us - TRAVELLO{% endblock %}
 
-        .about-us h1 {
-            margin: 0;
-            font-size: 3em;
-            text-transform: uppercase;
-            color: #ff6733;
-            text-shadow: 2px 2px 4px #000;
-        }
+{% block content %}
+<style>
+    .about-us {
+        background-image: url('https://www.w3schools.com/w3images/forestbridge.jpg');
+        background-size: cover;
+        background-position: center;
+        color: #fff;
+        text-align: center;
+        padding: 50px 0;
+    }
 
-        .wrapper {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.8);
-        }
+    .about-us h1 {
+        margin: 0;
+        font-size: 3em;
+        text-transform: uppercase;
+        color: #ff6733;
+        text-shadow: 2px 2px 4px #000;
+    }
 
-        .content {
-            flex: 1;
-            min-width: 300px;
-            max-width: 600px;
-            padding: 20px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            margin: 20px;
-        }
+    .wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.8);
+    }
 
-        .content h3 {
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            color: #007bff;
-        }
+    .content {
+        flex: 1;
+        min-width: 300px;
+        max-width: 600px;
+        padding: 20px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        margin: 20px;
+    }
 
-        .content p {
-            font-size: 1em;
-            line-height: 1.6;
-            color: #555;
-        }
+    .content h3 {
+        font-size: 1.5em;
+        margin-bottom: 20px;
+        color: #007bff;
+    }
 
-        .content h4 {
-            font-size: 1.2em;
-            margin-top: 20px;
-            color: #ff1493;
-        }
+    .content p {
+        font-size: 1em;
+        line-height: 1.6;
+        color: #555;
+    }
 
-        .button a {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-top: 20px;
-            background: #ff5733;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
+    .content h4 {
+        font-size: 1.2em;
+        margin-top: 20px;
+        color: #ff1493;
+    }
 
-        .button a:hover {
-            background: #ff7f50;
-        }
+    .button a {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 20px;
+        background: #ff5733;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background 0.3s;
+    }
 
-        .social {
-            margin-top: 20px;
-        }
+    .button a:hover {
+        background: #ff7f50;
+    }
 
-        .social a {
-            margin: 0 10px;
-            color: #333;
-            font-size: 1.5em;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
+    .social {
+        margin-top: 20px;
+    }
 
-        .social a:hover {
-            color: #007bff;
-        }
+    .social a {
+        margin: 0 10px;
+        color: #333;
+        font-size: 1.5em;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
 
-        .image-section {
-            flex: 1;
-            min-width: 300px;
-            max-width: 600px;
-            margin: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    .social a:hover {
+        color: #007bff;
+    }
 
-        .image-section img {
-            max-width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-    </style>
-</head>
-<body>
+    .image-section {
+        flex: 1;
+        min-width: 300px;
+        max-width: 600px;
+        margin: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-    <section class="about-us">
-        <h1>About Us</h1>
-    </section>
+    .image-section img {
+        max-width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+</style>
 
-    <section class="wrapper">
-        <div class="content">
-            <h3>Welcome to our website "TRAVELLO"!</h3>
-            <p>
-                We specialize in creating personalized travel experiences that turn your dreams into reality.
-                Whether you're looking for a relaxing beach getaway, an adventurous mountain trek, or a cultural city tour,
-                we craft each journey with care and expertise.
-            </p>
+<section class="about-us">
+    <h1>About Us</h1>
+</section>
 
-            <h4>Why Choose Us?</h4>
-            <p>
-                <strong>Certified Professionals:</strong> Our team consists of certified travel advisors and experienced guides who are passionate about making your trip unforgettable.<br>
-                <strong>Personalized Service:</strong> Tailored trips to suit your interests.<br>
-                <strong>Sustainable Travel:</strong> Eco-friendly practices and support for local communities.<br>
-                <strong>24/7 Support:</strong> We're here for you anytime, anywhere.<br>
-            </p>
+<section class="wrapper">
+    <div class="content">
+        <h3>Welcome to our website "TRAVELLO"!</h3>
+        <p>
+            We specialize in creating personalized travel experiences that turn your dreams into reality.
+            Whether you're looking for a relaxing beach getaway, an adventurous mountain trek, or a cultural city tour,
+            we craft each journey with care and expertise.
+        </p>
 
-            <p>Join us at TRAVELLO and embark on the adventure of a lifetime!</p>
+        <h4>Why Choose Us?</h4>
+        <p>
+            <strong>Certified Professionals:</strong> Our team consists of certified travel advisors and experienced guides who are passionate about making your trip unforgettable.<br>
+            <strong>Personalized Service:</strong> Tailored trips to suit your interests.<br>
+            <strong>Sustainable Travel:</strong> Eco-friendly practices and support for local communities.<br>
+            <strong>24/7 Support:</strong> We're here for you anytime, anywhere.<br>
+        </p>
 
-            <div class="button">
-                <a href="#">Read More</a>
-            </div>
+        <p>Join us at TRAVELLO and embark on the adventure of a lifetime!</p>
 
-            <div class="social">
-                <a href="https://www.facebook.com/anish.gurung.511038" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://x.com/" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                <a href="https://www.instagram.com/_anish__grg/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            </div>
+        <div class="button">
+            <a href="#">Read More</a>
         </div>
 
-        <div class="image-section">
-            <img src="https://www.w3schools.com/w3images/forestbridge.jpg" alt="Scenic forest bridge">
+        <div class="social">
+            <a href="https://www.facebook.com/anish.gurung.511038" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://x.com/" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/_anish__grg/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         </div>
-    </section>
+    </div>
 
-</body>
-</html>
+    <div class="image-section">
+        <img src="https://www.w3schools.com/w3images/forestbridge.jpg" alt="Scenic forest bridge">
+    </div>
+</section>
+{% endblock %}

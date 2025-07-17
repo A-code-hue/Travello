@@ -1,59 +1,10 @@
-{% load static %}
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>TRAVELLO - Destinations in {{ city }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% extends "main_base.html" %}
 
-    <link rel="shortcut icon" href="{% static 'img/favicon.png' %}">
-    <!-- CSS files -->
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
+{% block title %}
+TRAVELLO - Destinations in {{ city }}
+{% endblock title %}
 
-<header>
-    <div class="header-area">
-        <div id="sticky-header" class="main-header-area">
-            <div class="container-fluid">
-                <div class="header_bottom_border">
-                    <div class="row align-items-center">
-                        <div class="col-xl-2 col-lg-2">
-                            <div class="logo">
-                                <a href="{% url 'index' %}"><h1>TRAVELLO</h1></a>
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-6">
-                            <nav class="main-menu d-none d-lg-block">
-                                <ul id="navigation">
-                                    <li><a href="{% url 'index' %}">Home</a></li>
-                                    <li><a href="{% url 'about' %}">About</a></li>
-                                    {% if user.is_authenticated %}
-                                        <li>Hello, {{ user.first_name }}</li>
-                                        <li><a href="{% url 'logout' %}">Logout</a></li>
-                                    {% else %}
-                                        <li><a href="{% url 'login' %}">Login</a></li>
-                                        <li><a href="{% url 'register' %}">Register</a></li>
-                                    {% endif %}
-                                    <li><a href="{% url 'contact' %}">Contact</a></li>
-                                    
-                                            <li><a href="{% url 'blog_list' %}">Blog</a></li>
-                                </ul>
-                            </nav>
-                        </div>
-                        <div class="col-12">
-                            <div class="mobile_menu d-block d-lg-none"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
+{% block content %}
 <!-- Banner / Breadcrumb -->
 <div class="bradcam_area bradcam_bg_2">
     <div class="container">
@@ -88,7 +39,7 @@
                                 <p>{{ dest.destination.city.name }}</p>
                                 <div class="days">
                                     <i class="fa fa-clock-o"></i> {{ dest.days }} Days
-                                </div> 
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -101,54 +52,4 @@
         </div>
     </div>
 </div>
-
-
-    <!-- Footer Start -->
-    <footer class="footer">
-        <div class="footer_top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-4 col-md-6 col-lg-4">
-                        <div class="footer_widget">
-                            <a href="{% url 'index' %}">
-                                <h1>TRAVELLO</h1>
-                            </a>
-                            <p><br> Balkumari, Lalitpur <br>
-                                <a href="tel:+9779845000000">9845000000</a> <br>
-                                <a href="mailto:Travello@gmail.com">Travello@gmail.com</a>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-md-6 col-lg-2">
-                        <div class="footer_widget">
-                            <h3 class="footer_title">Travello</h3>
-                            <ul class="links">
-                                <li><a href="{% url 'about' %}">About</a></li>
-                                <li><a href="{% url 'contact' %}">Contact</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-md-6 col-lg-3">
-                        <div class="footer_widget">
-                            <h3 class="footer_title">Popular Destinations</h3>
-                            <ul class="links double_links">
-                                <li><a href="#">Kathmandu</a></li>
-                                <li><a href="#">Pokhara</a></li>
-                                <li><a href="#">Mustang</a></li>
-                                <li><a href="#">Janakpur</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- Footer End -->
-
-<!-- Scripts -->
-<script src="{% static 'js/vendor/jquery-1.12.4.min.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
-<script src="{% static 'js/main.js' %}"></script>
-
-</body>
-</html>
+{% endblock content %}
