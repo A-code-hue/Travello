@@ -2,16 +2,31 @@
 {% block title %}{{ post.title }} - TRAVELLO{% endblock %}
 
 {% block content %}
-    <h1>{{ post.title }}</h1>
-    <p>By {{ post.author.get_full_name }} | {{ post.created_at|date:"F j, Y" }}</p>
+<div class="container my-5">
+    <article class="card shadow-sm">
+        <div class="card-body">
+            <h1 class="card-title mb-3">{{ post.title }}</h1>
+            <p class="text-muted mb-4">
+                By <strong>{{ post.author.get_full_name }}</strong> &bull;
+                {{ post.created_at|date:"F j, Y" }}
+            </p>
 
-    {% if post.image %}
-        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="img-fluid mb-3">
-    {% endif %}
+            {% if post.image %}
+            <div class="mb-4 text-center">
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" class="img-fluid rounded">
+            </div>
+            {% endif %}
 
-    <div class="content">
-        {{ post.content|linebreaks }}
+            <div class="card-text fs-5" style="white-space: pre-line;">
+                {{ post.content }}
+            </div>
+        </div>
+    </article>
+
+    <div class="mt-4">
+        <a href="{% url 'blog_list' %}" class="btn btn-outline-primary">
+            &larr; Back to Blog
+        </a>
     </div>
-
-    <a href="{% url 'blog_list' %}" class="btn btn-secondary mt-3">Back to Blog</a>
+</div>
 {% endblock %}

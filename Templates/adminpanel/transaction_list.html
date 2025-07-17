@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Transactions</h2>
+    <a href="{% url 'admin_transaction_create' %}" class="btn btn-success mb-3">Add New Transaction</a>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr><th>ID</th><th>Username</th><th>Trip ID</th><th>Amount</th><th>Status</th><th>Payment Method</th><th>Date Time</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.transaction_id }}</td>
+                <td>{{ transaction.username }}</td>
+                <td>{{ transaction.trip_same_id }}</td>
+                <td>{{ transaction.amount }}</td>
+                <td>{{ transaction.status }}</td>
+                <td>{{ transaction.payment_method }}</td>
+                <td>{{ transaction.date_time }}</td>
+                <td>
+                    <a href="{% url 'admin_transaction_edit' transaction.transaction_id %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'admin_transaction_delete' transaction.transaction_id %}" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="8">No transactions found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

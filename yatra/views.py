@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login as auth_login
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
@@ -19,6 +20,12 @@ from .utils import recommend_tours
 
 # Home Page
 def index(request):
+    if request.method == 'POST':
+        preference = request.POST.get('preference')
+        if preference:
+            request.session['preference'] = preference
+            return redirect('index')  # prevent scroll and re-submit
+
     cities = City.objects.all()
     dests = Destination.objects.all()
 
@@ -30,10 +37,14 @@ def index(request):
         except DetailedDescription.DoesNotExist:
             continue
 
+    # Get preference from session (optional display)
+    preference = request.session.pop('preference', None)
+
     return render(request, 'index.html', {
         'cities': cities,
         'dests': dests,
         'dest1': dest1,
+        'preference': preference,
     })
 
 
@@ -73,11 +84,17 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
 
         if user:
-            auth.login(request, user)
-            messages.info(request, 'Successfully Logged In')
+            auth_login(request, user)
+
+            # Redirect superuser to admin dashboard
+            if user.is_superuser:
+                return redirect('admin_dashboard')
+
+            # Normal user goes to index
             dests = Destination.objects.all()
             return render(request, 'index.html', {'dests': dests})
         else:
+            from django.contrib import messages
             messages.info(request, 'Invalid Credentials')
             return redirect('login')
 

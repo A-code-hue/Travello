@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Passengers</h2>
+    <a href="{% url 'admin_passenger_create' %}" class="btn btn-success mb-3">Add New Passenger</a>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr><th>Trip ID</th><th>Name</th><th>Age</th><th>Trip Date</th><th>City</th><th>Num Passengers</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            {% for passenger in passengers %}
+            <tr>
+                <td>{{ passenger.trip_id }}</td>
+                <td>{{ passenger.first_name }} {{ passenger.last_name }}</td>
+                <td>{{ passenger.age }}</td>
+                <td>{{ passenger.trip_date }}</td>
+                <td>{{ passenger.city }}</td>
+                <td>{{ passenger.num_passengers }}</td>
+                <td>
+                    <a href="{% url 'admin_passenger_edit' passenger.trip_id %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'admin_passenger_delete' passenger.trip_id %}" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7">No passengers found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

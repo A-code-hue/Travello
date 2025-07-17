@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Contact Messages{% endblock %}
+{% block content %}
+<h1>Contact Messages</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th><th>Email</th><th>Phone</th><th>Message</th><th>Created At</th><th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for contact in contacts %}
+        <tr>
+            <td>{{ contact.name }}</td>
+            <td>{{ contact.email }}</td>
+            <td>{{ contact.phone }}</td>
+            <td>{{ contact.message|linebreaksbr }}</td>
+            <td>{{ contact.created_at }}</td>
+            <td>
+                <form action="{% url 'admin_contact_delete' contact.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6">No messages found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
