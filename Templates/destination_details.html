@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block content %}
-
 <div class="destination_banner_wrap overlay">
     <div class="destination_text text-center">
         <h3>{{ dest.destination.name }}</h3>
@@ -13,6 +12,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-9">
+
                 <div class="destination_info">
                     <h3>Description</h3>
                     <p>{{ dest.desc }}</p>
@@ -26,34 +26,39 @@
                         <p>{{ dest.day2 }}</p>
                     </div>
                     {% if dest.day3 %}
-                        <div class="single_destination">
-                            <h4>Day-03</h4>
-                            <p>{{ dest.day3 }}</p>
-                        </div>
+                    <div class="single_destination">
+                        <h4>Day-03</h4>
+                        <p>{{ dest.day3 }}</p>
+                    </div>
                     {% endif %}
                     {% if dest.day4 %}
-                        <div class="single_destination">
-                            <h4>Day-04</h4>
-                            <p>{{ dest.day4 }}</p>
-                        </div>
+                    <div class="single_destination">
+                        <h4>Day-04</h4>
+                        <p>{{ dest.day4 }}</p>
+                    </div>
                     {% endif %}
                     {% if dest.day5 %}
-                        <div class="single_destination">
-                            <h4>Day-05</h4>
-                            <p>{{ dest.day5 }}</p>
-                        </div>
+                    <div class="single_destination">
+                        <h4>Day-05</h4>
+                        <p>{{ dest.day5 }}</p>
+                    </div>
                     {% endif %}
                     {% if dest.day6 %}
-                        <div class="single_destination">
-                            <h4>Day-06</h4>
-                            <p>{{ dest.day6 }}</p>
-                        </div>
+                    <div class="single_destination">
+                        <h4>Day-06</h4>
+                        <p>{{ dest.day6 }}</p>
+                    </div>
                     {% endif %}
                 </div>
 
-                <div class="bordered_1px"></div>
+                <div class="bordered_1px my-4"></div>
 
-                <div class="contact_join">
+                <!-- Map Section -->
+                <h3 class="mt-5">Map of {{ dest.destination.city.name }}</h3>
+                <div id="map" class="my-3 border rounded"></div>
+
+                <!-- Booking Button -->
+                <div class="contact_join mt-4">
                     <h3>Book Now!!</h3>
                     <div class="row">
                         <div class="col-lg-12">
@@ -67,7 +72,7 @@
                     </div>
                 </div>
 
-                <!-- Back to destination list -->
+                <!-- Back Button -->
                 <a href="{% url 'destination_list' city=dest.destination.city.name %}" class="btn btn-secondary mt-4">
                     &larr; Back to {{ dest.destination.city.name }} Destinations
                 </a>
@@ -76,5 +81,54 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block scripts %}
+<!-- Leaflet CSS and JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<style>
+    #map {
+        height: 400px;
+        width: 100%;
+        min-height: 300px;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const city = "{{ dest.destination.city.name|urlencode }}";
+
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${city}`, {
+            headers: {
+                'User-Agent': 'TravelloMap/1.0 (contact@travello.com)'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                const lat = parseFloat(data[0].lat);
+                const lon = parseFloat(data[0].lon);
+
+                const map = L.map('map').setView([lat, lon], 10);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+                    maxZoom: 18,
+                }).addTo(map);
+
+                L.marker([lat, lon]).addTo(map)
+                    .bindPopup("{{ dest.destination.city.name }}")
+                    .openPopup();
+            } else {
+                document.getElementById('map').innerHTML = "<p class='text-danger p-3'>Map location not found.</p>";
+            }
+        })
+        .catch((error) => {
+            console.error("Map loading error:", error);
+            document.getElementById('map').innerHTML = "<p class='text-danger p-3'>Failed to load map.</p>";
+        });
+    });
+</script>
 {% endblock %}
