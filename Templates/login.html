@@ -1,108 +1,178 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>Login - Travello</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- Fonts & Styles -->
     <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}" />
     <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
-    <link rel="stylesheet" href="{% static 'fonts/iconic/css/material-design-iconic-font.min.css' %}">
-    <link rel="stylesheet" href="{% static 'vendor/animate/animate.css' %}">
-    <link rel="stylesheet" href="{% static 'vendor/css-hamburgers/hamburgers.min.css' %}">
-    <link rel="stylesheet" href="{% static 'vendor/animsition/css/animsition.min.css' %}">
-    <link rel="stylesheet" href="{% static 'vendor/select2/select2.min.css' %}">
-    <link rel="stylesheet" href="{% static 'vendor/daterangepicker/daterangepicker.css' %}">
-    <link rel="stylesheet" href="{% static 'css/util1.css' %}">
-    <link rel="stylesheet" href="{% static 'css/main1.css' %}">
+
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .container-login {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                              url('{% static "img/destination/nepal1.jpg" %}');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-box {
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-title {
+            font-size: 30px;
+            font-weight: bold;
+            color: orange;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .input-icon {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #aaa;
+        }
+
+        .input-field {
+            width: 100%;
+            padding-left: 30px;
+            padding-bottom: 10px;
+            border: none;
+            border-bottom: 2px solid #ccc;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-field:focus {
+            border-color: orange;
+        }
+
+        .custom-toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .login-btn {
+            width: 100%;
+            height: 45px;
+            background: orange;
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #e66b00;
+        }
+
+        .text-center h5 {
+            margin-top: 10px;
+            color: red;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 15px;
+            color: #333;
+        }
+
+        .signup-link a {
+            color: orange;
+            text-decoration: none;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="limiter">
-        <div class="container-login100" style="background-image: url('{% static 'img/destination/nepal1.jpg' %}');">
-            <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+    <div class="container-login">
+        <div class="login-box">
+            <form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="login-title">Travello Login</div>
 
-                <form action="{% url 'login' %}" method="POST" class="login100-form validate-form">
-                    {% csrf_token %}
+                <!-- Username -->
+                <div class="input-group">
+                    <i class="fa fa-user input-icon"></i>
+                    <input type="text" name="username" class="input-field" placeholder="Username" required>
+                </div>
 
-                    <span class="login100-form-title p-b-49" style="color: orange; font-size: 30px;">
-                        Travello
-                    </span>
+                <!-- Password -->
+                <div class="input-group">
+                    <i class="fa fa-lock input-icon"></i>
+                    <input type="password" name="password" class="input-field" id="password" placeholder="Password" required>
+                    <i class="fa fa-eye-slash custom-toggle-password" id="customTogglePassword"></i>
+                </div>
 
-                    <div class="wrap-input100 validate-input m-b-23" data-validate="Username is required">
-                        <span class="label-input100">Username</span>
-                        <input class="input100" type="text" name="username" placeholder="Type your username" required>
-                        <span class="focus-input100" data-symbol="&#xf206;"></span>
-                    </div>
+                <!-- Login Button -->
+                <button type="submit" class="login-btn">Login</button>
 
-                    <div class="wrap-input100 validate-input" data-validate="Password is required" style="position:relative;">
-                        <span class="label-input100">Password</span>
-                        <input id="password" class="input100" type="password" name="password" placeholder="Type your password" required>
-                        <span class="focus-input100" data-symbol="&#xf190;"></span>
-                        <!-- Eye icon -->
-                        <i class="fa fa-eye toggle-password" toggle="#password" 
-                           style="position:absolute; right:15px; top:38px; cursor:pointer; color: #666;"></i>
-                    </div>
+                <!-- Messages -->
+                <div class="text-center">
+                    {% for message in messages %}
+                        <h5>{{ message }}</h5>
+                    {% endfor %}
+                </div>
 
-                    <div class="text-right p-t-8 p-b-31">
-                        <!-- Optional: Forgot password link -->
-                    </div>
-
-                    <div class="container-login100-form-btn">
-                        <div class="wrap-login100-form-btn">
-                            <div class="login100-form-bgbtn"></div>
-                            <button class="login100-form-btn" type="submit">
-                                Login
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="text-center p-t-20">
-                        {% for message in messages %}
-                        <h4 style="color: red;">{{ message }}</h4>
-                        {% endfor %}
-                    </div>
-
-                    <div class="flex-col-c p-t-20">
-                        <a href="{% url 'register' %}" class="txt6" style="color: orange;">
-                            Sign Up
-                        </a>
-                    </div>
-                </form>
-
-            </div>
+                <!-- Sign Up -->
+                <div class="signup-link">
+                    Don’t have an account? <a href="{% url 'register' %}">Sign Up</a>
+                </div>
+            </form>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
-    <script src="{% static 'vendor/animsition/js/animsition.min.js' %}"></script>
-    <script src="{% static 'vendor/bootstrap/js/popper.js' %}"></script>
-    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'vendor/select2/select2.min.js' %}"></script>
-    <script src="{% static 'vendor/daterangepicker/moment.min.js' %}"></script>
-    <script src="{% static 'vendor/daterangepicker/daterangepicker.js' %}"></script>
-    <script src="{% static 'vendor/countdowntime/countdowntime.js' %}"></script>
-    <script src="{% static 'js/main1.js' %}"></script>
-
+    <!-- Toggle Password Script -->
     <script>
-        $(document).ready(function () {
-            $(".toggle-password").click(function () {
-                let input = $($(this).attr("toggle"));
-                if (input.attr("type") === "password") {
-                    input.attr("type", "text");
-                    $(this).removeClass("fa-eye").addClass("fa-eye-slash");
-                } else {
-                    input.attr("type", "password");
-                    $(this).removeClass("fa-eye-slash").addClass("fa-eye");
-                }
-            });
+        const toggle = document.getElementById("customTogglePassword");
+        const password = document.getElementById("password");
+
+        toggle.addEventListener("click", () => {
+            const isHidden = password.getAttribute("type") === "password";
+            password.setAttribute("type", isHidden ? "text" : "password");
+
+            toggle.classList.toggle("fa-eye");
+            toggle.classList.toggle("fa-eye-slash");
         });
     </script>
-
 </body>
-
 </html>

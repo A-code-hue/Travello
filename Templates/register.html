@@ -3,124 +3,293 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Colorlib Templates">
-    <meta name="author" content="Colorlib">
-    <meta name="keywords" content="Colorlib Templates">
-
+    <meta charset="UTF-8" />
     <title>Sign Up - TRAVELLO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Icons font CSS -->
-    <link href="{% static 'colorlib-regform-4/vendor/mdi-font/css/material-design-iconic-font.min.css' %}" rel="stylesheet" media="all">
-    <link href="{% static 'colorlib-regform-4/vendor/font-awesome-4.7/css/font-awesome.min.css' %}" rel="stylesheet" media="all">
+    <!-- Font Awesome & Material Design Iconic Font -->
+    <link href="{% static 'colorlib-regform-4/vendor/font-awesome-4.7/css/font-awesome.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'colorlib-regform-4/vendor/mdi-font/css/material-design-iconic-font.min.css' %}"
+        rel="stylesheet" />
 
-    <!-- Font special -->
-    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600" rel="stylesheet" />
 
     <!-- Vendor CSS -->
-    <link href="{% static 'colorlib-regform-4/vendor/select2/select2.min.css' %}" rel="stylesheet" media="all">
-    <link href="{% static 'colorlib-regform-4/vendor/datepicker/daterangepicker.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'colorlib-regform-4/vendor/select2/select2.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'colorlib-regform-4/vendor/datepicker/daterangepicker.css' %}" rel="stylesheet" />
 
     <!-- Main CSS -->
-    <link href="{% static 'colorlib-regform-4/css/main.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'colorlib-regform-4/css/main.css' %}" rel="stylesheet" />
+
+    <style>
+        /* Base setup */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1650&q=80") center center / cover no-repeat fixed;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Card container */
+        .wrapper {
+            max-width: 680px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+            padding: 40px 45px;
+            box-sizing: border-box;
+        }
+
+        h2.title {
+            text-align: center;
+            margin-bottom: 35px;
+            font-weight: 600;
+            color: #4272d7;
+            letter-spacing: 1.2px;
+            user-select: none;
+        }
+
+        form {
+            width: 100%;
+        }
+
+        /* Form rows: flex container for columns */
+        .row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        /* Half width columns for two inputs side-by-side */
+        .col-half {
+            flex: 1 1 48%;
+            min-width: 260px;
+            /* for responsiveness */
+            position: relative;
+        }
+
+        /* Full width columns for inputs spanning entire form width */
+        .col-full {
+            flex: 1 1 100%;
+            position: relative;
+        }
+
+        /* Label style */
+        label.label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #555;
+            user-select: none;
+        }
+
+        /* Input fields */
+        .input--style-4 {
+            width: 100%;
+            height: 38px;
+            font-size: 14px;
+            padding: 0 40px 0 40px;
+            /* left & right padding for icons */
+            border: none;
+            border-bottom: 2px solid #4272d7;
+            border-radius: 4px;
+            background-color: transparent;
+            color: #333;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        /* Placeholder color */
+        .input--style-4::placeholder {
+            color: #aaa;
+        }
+
+        /* Focus style */
+        .input--style-4:focus {
+            outline: none;
+            border-bottom-color: #2ecc71;
+        }
+
+        /* Left icon inside input */
+        .input-icon-left {
+            position: absolute;
+            left: 12px;
+            top: 70%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #888;
+            pointer-events: none;
+            user-select: none;
+            z-index: 10;
+        }
+
+        /* Eye toggle icon on right inside password fields */
+        .custom-toggle-eye {
+            position: absolute;
+            right: 12px;
+            top: 70%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #888;
+            cursor: pointer;
+            z-index: 10;
+            user-select: none;
+        }
+
+        /* Buttons container */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 1px;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            min-width: 100px;
+            font-size: 13px;
+            border-radius: 25px;
+            border: none;
+            height: 40px;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .btn--blue {
+            background-color: orange;
+            color: white;
+        }
+
+        .btn--blue:hover {
+            background-color: orangered;
+        }
+
+        .btn--green {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .btn--green:hover {
+            background-color: #27ae60;
+        }
+
+        /* Message area */
+        .message {
+            text-align: center;
+            margin-top: 25px;
+            color: #e74c3c;
+            font-weight: 600;
+            user-select: none;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="wrapper">
+        <h2 class="title">Registration Form</h2>
+        <form action="register" method="POST" autocomplete="off">
+            {% csrf_token %}
 
-    <div class="page-wrapper bg-gra-02 p-t-130 p-b-100 font-poppins">
-        <div class="wrapper wrapper--w680">
-            <div class="card card-4">
-                <div class="card-body">
-                    <h2 class="title">Registration Form</h2>
-                    <form action="register" method="POST">
-                        {% csrf_token %}
-                        <div class="row row-space">
-                            <div class="col-2">
-                                <div class="input-group">
-                                    <label class="label">First Name</label>
-                                    <input class="input--style-4" type="text" name="first_name">
-                                </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="input-group">
-                                    <label class="label">Last Name</label>
-                                    <input class="input--style-4" type="text" name="last_name">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row row-space">
-                            <div class="col-2">
-                                <div class="input-group" style="position:relative;">
-                                    <label class="label">Password</label>
-                                    <input id="password1" class="input--style-4" type="password" name="password1" />
-                                    <i class="fa fa-eye toggle-password" toggle="#password1" style="position:absolute; right:10px; top:38px; cursor:pointer;"></i>
-                                </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="input-group" style="position:relative;">
-                                    <label class="label">Confirm Password</label>
-                                    <input id="password2" class="input--style-4" type="password" name="password2" />
-                                    <i class="fa fa-eye toggle-password" toggle="#password2" style="position:absolute; right:10px; top:38px; cursor:pointer;"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row row-space">
-                            <div class="col-2">
-                                <div class="input-group">
-                                    <label class="label">Email</label>
-                                    <input class="input--style-4" type="email" name="email">
-                                </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="input-group">
-                                    <label class="label">Username</label>
-                                    <input class="input--style-4" type="text" name="username" maxlength="10">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-t-15" style="text-align: center;">
-                            <button class="btn btn--radius-2 btn--blue" type="submit">Submit</button>
-                            <br><br>
-                            <button class="btn btn--radius-2 btn--green" type="button" onclick="window.location.href='login'">Signin</button>
-                        </div>
-
-                        <div style="margin-top: 20px; text-align: center;">
-                            {% for message in messages %}
-                            <h4>{{ message }}</h4>
-                            {% endfor %}
-                        </div>
-                    </form>
+            <!-- First and Last Name -->
+            <div class="row">
+                <div class="col-half">
+                    <label for="first_name" class="label">First Name</label>
+                    <i class="fa fa-user input-icon-left"></i>
+                    <input id="first_name" name="first_name" type="text" class="input--style-4" placeholder="First Name"
+                        required />
+                </div>
+                <div class="col-half">
+                    <label for="last_name" class="label">Last Name</label>
+                    <i class="fa fa-user input-icon-left"></i>
+                    <input id="last_name" name="last_name" type="text" class="input--style-4" placeholder="Last Name"
+                        required />
                 </div>
             </div>
-        </div>
+
+            <!-- Email (full width) -->
+            <div class="row">
+                <div class="col-full">
+                    <label for="email" class="label">Email</label>
+                    <i class="fa fa-envelope input-icon-left"></i>
+                    <input id="email" name="email" type="email" class="input--style-4" placeholder="Email" required />
+                </div>
+            </div>
+
+            <!-- Username (full width) -->
+            <div class="row">
+                <div class="col-full">
+                    <label for="username" class="label">Username</label>
+                    <i class="fa fa-user input-icon-left"></i>
+                    <input id="username" name="username" maxlength="10" type="text" class="input--style-4"
+                        placeholder="Username" required />
+                </div>
+            </div>
+
+            <!-- Password and Confirm Password -->
+            <div class="row">
+                <div class="col-half">
+                    <label for="password1" class="label">Password</label>
+                    <i class="fa fa-lock input-icon-left"></i>
+                    <input id="password1" name="password1" type="password" class="input--style-4" placeholder="Password"
+                        required />
+                    <i class="fa fa-eye-slash custom-toggle-eye" toggle="#password1" title="Show/Hide Password"></i>
+                </div>
+                <div class="col-half">
+                    <label for="password2" class="label">Confirm Password</label>
+                    <i class="fa fa-lock input-icon-left"></i>
+                    <input id="password2" name="password2" type="password" class="input--style-4"
+                        placeholder="Confirm Password" required />
+                    <i class="fa fa-eye-slash custom-toggle-eye" toggle="#password2" title="Show/Hide Password"></i>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="btn-group">
+                <button type="submit" class="btn btn--blue">Register</button>
+                <button type="button" class="btn btn--green" onclick="window.location.href='login'">Login</button>
+            </div>
+
+            <!-- Messages -->
+            <div class="message">
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        </form>
     </div>
 
-    <!-- Scripts outside of the form -->
+    <!-- jQuery -->
     <script src="{% static 'colorlib-regform-4/vendor/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'colorlib-regform-4/vendor/select2/select2.min.js' %}"></script>
-    <script src="{% static 'colorlib-regform-4/vendor/datepicker/moment.min.js' %}"></script>
-    <script src="{% static 'colorlib-regform-4/vendor/datepicker/daterangepicker.js' %}"></script>
-    <script src="{% static 'colorlib-regform-4/js/global.js' %}"></script>
 
+    <!-- Toggle password visibility -->
     <script>
-        $(document).ready(function() {
-            $(".toggle-password").click(function() {
-                let input = $($(this).attr("toggle"));
+        $(function () {
+            $(".custom-toggle-eye").click(function () {
+                const input = $($(this).attr("toggle"));
+                const icon = $(this);
                 if (input.attr("type") === "password") {
                     input.attr("type", "text");
-                    $(this).removeClass("fa-eye").addClass("fa-eye-slash");
+                    icon.removeClass("fa-eye-slash").addClass("fa-eye");
                 } else {
                     input.attr("type", "password");
-                    $(this).removeClass("fa-eye-slash").addClass("fa-eye");
+                    icon.removeClass("fa-eye").addClass("fa-eye-slash");
                 }
             });
         });
     </script>
-
 </body>
 
 </html>
