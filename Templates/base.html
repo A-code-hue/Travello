@@ -51,6 +51,7 @@
     <nav class="nav flex-column px-3">
         <a class="nav-link {% if request.path == '/' or request.path == '/admin-panel/' %}active{% endif %}" href="{% url 'admin_dashboard' %}">Dashboard</a>
 
+        <a class="nav-link {% if 'user' in request.path %}active{% endif %}" href="{% url 'admin_user_list' %}">Users</a>
         <a class="nav-link {% if 'city' in request.path %}active{% endif %}" href="{% url 'admin_city_list' %}">Cities</a>
         <a class="nav-link {% if 'destination' in request.path %}active{% endif %}" href="{% url 'admin_destination_list' %}">Destinations</a>
         <a class="nav-link {% if 'detail' in request.path %}active{% endif %}" href="{% url 'admin_detail_list' %}">Detailed Descriptions</a>

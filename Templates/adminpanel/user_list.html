@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>User List</h2>
+<a href="{% url 'admin_user_create' %}" class="btn btn-success mb-2">Add User</a>
+<table class="table table-bordered">
+    <thead>
+        <tr><th>ID</th><th>Username</th><th>Email</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+                <a href="{% url 'admin_user_edit' user.id %}" class="btn btn-primary btn-sm">Edit</a>
+                <a href="{% url 'admin_user_delete' user.id %}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

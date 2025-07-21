@@ -2,7 +2,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from yatra.models import City, Destination, DetailedDescription, PassengerDetail, Transaction, Newsletter, Contact, BlogPost
-from .forms import CityForm, DestinationForm, DetailedDescriptionForm, PassengerDetailForm, TransactionForm, BlogPostForm
+from .forms import CityForm, DestinationForm, DetailedDescriptionForm, PassengerDetailForm, TransactionForm, BlogPostForm, UserForm
 
 @staff_member_required
 def dashboard(request):
@@ -14,13 +14,52 @@ def dashboard(request):
     blogposts_count = BlogPost.objects.count()
 
     return render(request, 'adminpanel/dashboard.html', {
-        'user_count': user_count,
-        'destinations': destinations,
-        'transactions': transactions,
-        'subscribers': subscribers,
-        'contacts_count': contacts_count,
-        'blogposts_count': blogposts_count,
+        'user_count': User.objects.count(),
+        'destinations': Destination.objects.all(),
+        'transactions': Transaction.objects.all(),
+        'subscribers': Newsletter.objects.count(),
+        'contacts_count': Contact.objects.count(),
+        'blogposts_count': BlogPost.objects.count(),
+        'bookings_count': PassengerDetail.objects.count(),
+        'cities_count': City.objects.count(),
+        'detail_count': DetailedDescription.objects.count()
     })
+
+# List all users
+def user_list(request):
+    users = User.objects.all()
+    return render(request, 'adminpanel/user_list.html', {'users': users})
+
+# Create user
+def user_create(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_user_list')
+    else:
+        form = UserForm()
+    return render(request, 'adminpanel/form.html', {'form': form, 'title': 'Create User'})
+
+# Edit user
+def user_edit(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    if request.method == 'POST':
+        form = UserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_user_list')
+    else:
+        form = UserForm(instance=user)
+    return render(request, 'adminpanel/form.html', {'form': form, 'title': 'Edit User'})
+
+# Delete user
+def user_delete(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    if request.method == 'POST':
+        user.delete()
+        return redirect('admin_user_list')
+    return render(request, 'adminpanel/confirm_delete.html', {'object': user})
 
 # --- City CRUD ---
 

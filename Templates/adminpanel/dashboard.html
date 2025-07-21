@@ -6,54 +6,114 @@
     <h2 class="mb-4">Welcome to the Admin Dashboard</h2>
 
     <div class="row">
+        <!-- Users -->
         <div class="col-md-2">
-            <div class="card text-white bg-primary mb-3">
-                <div class="card-header">Users</div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ user_count }}</h5>
+            <a href="{% url 'admin_user_list' %}" class="text-decoration-none">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header">Users</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ user_count }}</h5>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
+
+        <!-- Destinations -->
         <div class="col-md-2">
-            <div class="card text-white bg-success mb-3">
-                <div class="card-header">Destinations</div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ destinations.count }}</h5>
+            <a href="{% url 'admin_destination_list' %}" class="text-decoration-none">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-header">Destinations</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ destinations.count }}</h5>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
+
+        <!-- Transactions -->
         <div class="col-md-2">
-            <div class="card text-white bg-warning mb-3">
-                <div class="card-header">Transactions</div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ transactions.count }}</h5>
+            <a href="{% url 'admin_transaction_list' %}" class="text-decoration-none">
+                <div class="card text-white bg-warning mb-3">
+                    <div class="card-header">Transactions</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ transactions.count }}</h5>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
+
+        <!-- Subscribers -->
         <div class="col-md-2">
-            <div class="card text-white bg-info mb-3">
-                <div class="card-header">Subscribers</div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ subscribers }}</h5>
+            <a href="{% url 'admin_newsletter_list' %}" class="text-decoration-none">
+                <div class="card text-white bg-info mb-3">
+                    <div class="card-header">Subscribers</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ subscribers }}</h5>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
+
+        <!-- Contacts -->
         <div class="col-md-2">
-            <div class="card text-white bg-secondary mb-3">
-                <div class="card-header">Contacts</div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ contacts_count }}</h5>
+            <a href="{% url 'admin_contact_list' %}" class="text-decoration-none">
+                <div class="card text-white bg-secondary mb-3">
+                    <div class="card-header">Contacts</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ contacts_count }}</h5>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
+
+        <!-- Blog Posts -->
         <div class="col-md-2">
-            <div class="card text-white bg-dark mb-3">
-                <div class="card-header">Blog Posts</div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ blogposts_count }}</h5>
+            <a href="{% url 'admin_blogpost_list' %}" class="text-decoration-none">
+                <div class="card text-white bg-dark mb-3">
+                    <div class="card-header">Blog Posts</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ blogposts_count }}</h5>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
+
+        <!-- Bookings -->
+        <div class="col-md-2">
+            <a href="{% url 'admin_booking_list' %}" class="text-decoration-none">
+                <div class="card text-white bg-danger mb-3">
+                    <div class="card-header">Bookings</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ bookings_count }}</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Cities -->
+        <div class="col-md-2">
+            <a href="{% url 'admin_city_list' %}" class="text-decoration-none">
+                <div class="card text-white bg-secondary mb-3">
+                    <div class="card-header">Cities</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ cities_count }}</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Detail Descriptions -->
+        <div class="col-md-2">
+            <a href="{% url 'admin_detail_list' %}" class="text-decoration-none">
+                <div class="card text-white bg-secondary mb-3">
+                    <div class="card-header">Descriptions</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ detail_count }}</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
     </div>
 </div>
 {% endblock %}

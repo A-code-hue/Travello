@@ -132,12 +132,10 @@ class KeyValueForm(forms.Form):
     last_name = forms.CharField()
     age = forms.IntegerField(min_value=1, max_value=100)
 
-# Passenger detail submission view
+# View to handle passenger detail input and trip ID assignment
 @login_required
 def pessanger_detail_def(request, city_name):
-    # Get passenger count from GET or default to 1
     num_passengers = int(request.GET.get('num_passengers', 1))
-    
     KeyValueFormSet = formset_factory(KeyValueForm, extra=0, min_num=1, validate_min=True)
 
     if request.method == 'POST':
@@ -149,20 +147,15 @@ def pessanger_detail_def(request, city_name):
             if trip_date < datetime.now().date():
                 return redirect('index')
 
-            try:
-                obj = PassengerDetail.objects.get(trip_id=1)
-            except PassengerDetail.DoesNotExist:
-                return redirect('index')
+            # ✅ Get the last trip_same_id or start with 1
+            last_trip = PassengerDetail.objects.order_by('-trip_same_id').first()
+            trip_same_id = (last_trip.trip_same_id + 1) if last_trip else 1
 
-            trip_same_id = obj.trip_same_id
             price = request.session.get('price', 20000)
             city = request.session.get('city', city_name)
             user = request.user
-
-            # Get ACTUAL number of submitted forms
             actual_passengers = formset.total_form_count()
-            
-            # Store all passenger details
+
             for form in formset:
                 PassengerDetail.objects.create(
                     trip_same_id=trip_same_id,
@@ -173,19 +166,13 @@ def pessanger_detail_def(request, city_name):
                     payment=price,
                     user=user,
                     city=city,
-                    num_passengers=actual_passengers  # Store actual count
+                    num_passengers=actual_passengers
                 )
 
-            # Update trip ID
-            obj.trip_same_id += 1
-            obj.save()
-
-            # Calculate payment details
             total_price = actual_passengers * price
             gst = round(total_price * 0.13, 2)
             final_amount = total_price + gst
 
-            # Store ALL payment details in session
             request.session.update({
                 'Trip_same_id': trip_same_id,
                 'pay_amount': final_amount,
@@ -204,8 +191,8 @@ def pessanger_detail_def(request, city_name):
                 'city': city,
                 'Trip_id': trip_same_id
             })
+
     else:
-        # For GET requests, create forms for the requested number of passengers
         formset = KeyValueFormSet(initial=[{} for _ in range(num_passengers)])
 
     context = {

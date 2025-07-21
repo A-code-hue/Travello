@@ -4,6 +4,12 @@ from . import views
 urlpatterns = [
     path('', views.dashboard, name='admin_dashboard'),
 
+    # User Management
+    path('users/', views.user_list, name='admin_user_list'),
+    path('users/create/', views.user_create, name='admin_user_create'),
+    path('users/edit/<int:pk>/', views.user_edit, name='admin_user_edit'),
+    path('users/delete/<int:pk>/', views.user_delete, name='admin_user_delete'),
+
     # City
     path('cities/', views.city_list, name='admin_city_list'),
     path('cities/create/', views.city_create, name='admin_city_create'),
