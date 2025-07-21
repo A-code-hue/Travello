@@ -22,6 +22,7 @@
             top: 0;
             bottom: 0;
             color: white;
+            overflow-y: auto;
         }
         .sidebar .nav-link {
             color: #adb5bd;
@@ -55,9 +56,9 @@
         <a class="nav-link {% if 'detail' in request.path %}active{% endif %}" href="{% url 'admin_detail_list' %}">Detailed Descriptions</a>
         <a class="nav-link {% if 'passenger' in request.path %}active{% endif %}" href="{% url 'admin_passenger_list' %}">Passengers</a>
         <a class="nav-link {% if 'transaction' in request.path %}active{% endif %}" href="{% url 'admin_transaction_list' %}">Transactions</a>
-        <a class="nav-link {% if 'newsletter' in request.path %}active{% endif %}" href="{% url 'admin_newsletter_list' %}">Newsletter Subscribers</a>
+        <a class="nav-link {% if 'booking' in request.path %}active{% endif %}" href="{% url 'admin_booking_list' %}">Bookings</a>
 
-        <!-- New Links Added -->
+        <a class="nav-link {% if 'newsletter' in request.path %}active{% endif %}" href="{% url 'admin_newsletter_list' %}">Newsletter Subscribers</a>
         <a class="nav-link {% if 'contact' in request.path %}active{% endif %}" href="{% url 'admin_contact_list' %}">Contacts</a>
         <a class="nav-link {% if 'blogpost' in request.path %}active{% endif %}" href="{% url 'admin_blogpost_list' %}">Blog Posts</a>
 

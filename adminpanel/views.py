@@ -281,3 +281,29 @@ def blogpost_delete(request, pk):
         post.delete()
         return redirect('admin_blogpost_list')
     return render(request, 'adminpanel/confirm_delete.html', {'object': post})
+
+
+from django.contrib import messages
+
+@staff_member_required
+def admin_booking_list(request):
+    bookings = PassengerDetail.objects.all().order_by('-created_at')
+    return render(request, 'adminpanel/admin_booking_list.html', {'bookings': bookings})
+
+@staff_member_required
+def admin_approve_booking(request, trip_id):
+    booking = get_object_or_404(PassengerDetail, trip_id=trip_id)
+    booking.approved = True
+    booking.canceled = False
+    booking.save()
+    messages.success(request, f'Booking {trip_id} approved.')
+    return redirect('admin_booking_list')
+
+@staff_member_required
+def admin_cancel_booking(request, trip_id):
+    booking = get_object_or_404(PassengerDetail, trip_id=trip_id)
+    booking.canceled = True
+    booking.approved = False
+    booking.save()
+    messages.success(request, f'Booking {trip_id} canceled.')
+    return redirect('admin_booking_list')

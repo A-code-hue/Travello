@@ -16,6 +16,7 @@ from django import forms
 from .models import Destination, DetailedDescription, PassengerDetail, Transaction, Contact, City, Newsletter
 from .forms import ContactForm
 from .utils import recommend_tours
+from django.views.decorators.http import require_POST
 
 
 # Home Page
@@ -389,3 +390,48 @@ def subscribe_newsletter(request):
         return redirect(request.META.get('HTTP_REFERER', '/'))
 
     return redirect('index')
+
+@login_required
+def user_booking_list(request):
+    bookings = PassengerDetail.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'user_booking_list.html', {'bookings': bookings})
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+
+@csrf_exempt
+@login_required
+def update_booking_location(request, trip_id):
+    if request.method == 'POST':
+        booking = get_object_or_404(PassengerDetail, trip_id=trip_id, user=request.user)
+        try:
+            data = json.loads(request.body)
+            lat = data.get('latitude')
+            lon = data.get('longitude')
+            if lat is not None and lon is not None:
+                booking.latitude = lat
+                booking.longitude = lon
+                booking.save()
+                return JsonResponse({'status': 'success'})
+            else:
+                return JsonResponse({'status': 'fail', 'error': 'Missing latitude or longitude'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'fail', 'error': str(e)}, status=400)
+    else:
+        return JsonResponse({'status': 'fail', 'error': 'Invalid request method'}, status=405)
+
+
+
+@login_required
+@require_POST
+def cancel_booking(request, trip_id):
+    booking = get_object_or_404(PassengerDetail, trip_id=trip_id, user=request.user)
+
+    if booking.canceled:
+        return JsonResponse({"status": "error", "error": "Booking already canceled."})
+
+    booking.canceled = True
+    booking.save()
+
+    return JsonResponse({"status": "success"})

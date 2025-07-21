@@ -47,4 +47,9 @@ urlpatterns = [
     path('blogposts/create/', views.blogpost_create, name='admin_blogpost_create'),
     path('blogposts/edit/<int:pk>/', views.blogpost_edit, name='admin_blogpost_edit'),
     path('blogposts/delete/<int:pk>/', views.blogpost_delete, name='admin_blogpost_delete'),
+
+    # Admin booking management
+    path('bookings/', views.admin_booking_list, name='admin_booking_list'),
+    path('bookings/approve/<int:trip_id>/', views.admin_approve_booking, name='admin_approve_booking'),
+    path('bookings/cancel/<int:trip_id>/', views.admin_cancel_booking, name='admin_cancel_booking'),
 ]

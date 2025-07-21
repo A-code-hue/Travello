@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-4">All Bookings</h1>
+
+  {% if messages %}
+    <div class="alert alert-info">
+      {% for message in messages %}
+        <div>{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <table class="table table-striped table-bordered table-hover align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th>Trip ID</th>
+        <th>User</th>
+        <th>Trip Same ID</th>
+        <th>Passenger Name</th>
+        <th>Trip Date</th>
+        <th>Approved</th>
+        <th>Canceled</th>
+        <th>GPS Location</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for b in bookings %}
+      <tr>
+        <td>{{ b.trip_id }}</td>
+        <td>{{ b.user.username }}</td>
+        <td>{{ b.trip_same_id }}</td>
+        <td>{{ b.first_name }} {{ b.last_name }}</td>
+        <td>{{ b.trip_date }}</td>
+        <td>
+          {% if b.approved %}
+            <span class="badge bg-success">Approved</span>
+          {% else %}
+            <span class="badge bg-secondary">Pending</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if b.canceled %}
+            <span class="badge bg-danger">Canceled</span>
+          {% else %}
+            <span class="badge bg-secondary">Active</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if b.latitude and b.longitude %}
+            {{ b.latitude }}, {{ b.longitude }} <br>
+            <a href="https://www.google.com/maps?q={{ b.latitude }},{{ b.longitude }}" target="_blank" class="btn btn-sm btn-primary mt-1">View Map</a>
+          {% else %}
+            <em>Not Set</em>
+          {% endif %}
+        </td>
+        <td>
+          {% if not b.approved and not b.canceled %}
+            <a href="{% url 'admin_approve_booking' b.trip_id %}" class="btn btn-sm btn-success me-1">Approve</a>
+            <a href="{% url 'admin_cancel_booking' b.trip_id %}" onclick="return confirm('Cancel this booking?')" class="btn btn-sm btn-danger">Cancel</a>
+          {% elif b.canceled %}
+            <em class="text-danger">Canceled</em>
+          {% else %}
+            <em class="text-success">Approved</em>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

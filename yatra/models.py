@@ -62,6 +62,12 @@ class PassengerDetail(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # New fields for admin approval, cancel, GPS location
+    approved = models.BooleanField(default=False)
+    canceled = models.BooleanField(default=False)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+
     def __str__(self):
         return f"{self.first_name} {self.last_name} - Trip ID: {self.trip_id}"
 

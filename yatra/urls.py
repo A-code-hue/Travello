@@ -28,4 +28,10 @@ urlpatterns = [
     path('blog/<slug:slug>/', views.blog_detail, name='blog_detail'),
     
     path('subscribe/', views.subscribe_newsletter, name='subscribe_newsletter'),
+
+    
+    # User bookings and GPS update
+    path('bookings/', views.user_booking_list, name='user_booking_list'),
+    path('bookings/cancel/<int:trip_id>/', views.cancel_booking, name='cancel_booking'),
+    path('bookings/update-location/<int:trip_id>/', views.update_booking_location, name='update_booking_location')
 ]
