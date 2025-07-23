@@ -4,29 +4,48 @@
 
 {% block content %}
 
+<!-- ========== GLOBAL RESET FOR FULL WIDTH BANNER ========== -->
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden; /* prevent horizontal scroll */
+    box-sizing: border-box;
+  }
+</style>
+
 <!-- ========== COLORFUL BANNER ========== -->
-<section class="position-relative overflow-hidden text-center text-white" 
-         style="background: url('/static/images/banner-bg.jpg') center/cover no-repeat; min-height: 450px;">
+<section class="position-relative overflow-hidden text-center text-white"
+         style="background: url('/static/images/banner-bg.jpg') center/cover no-repeat; 
+                width: 100%; 
+                height: 100vh; 
+                margin: 0; 
+                padding: 0;">
   <div class="d-flex flex-column justify-content-center align-items-center h-100 px-3 px-md-5" 
-       style="background: rgba(0,0,0,0.65);">
-       
+       style="background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)); height: 100%;">
     <h1 class="display-3 fw-bold mb-3 gradient-text animate-fade-in">Welcome to Travello</h1>
     <p class="lead fs-4 animate-slide-in-up">Explore Nepal’s Most Beautiful Cities</p>
   </div>
 </section>
 
-<!-- ========== CITY LISTING ========== -->
+<!-- ========== CITY FILTER + LISTING ========== -->
 <section class="container py-5">
-  <h2 class="text-center fw-bold mb-5 text-secondary">Explore Cities</h2>
-  <div class="row g-4">
+  <h2 class="text-center fw-bold mb-4 text-secondary">Explore Cities</h2>
+
+  <div class="mb-4 text-center">
+    <input type="text" id="citySearch" class="form-control form-control-lg w-75 mx-auto" placeholder="Search for a city...">
+  </div>
+
+  <div class="row g-4" id="cityList">
     {% for city in cities %}
-      <div class="col-lg-4 col-md-6">
-        <div class="card shadow-sm border-0 h-100 city-card hover-scale rounded-4">
+      <div class="col-lg-4 col-md-6 city-card-container">
+        <div class="card shadow-sm border border-light-subtle h-100 city-card hover-scale rounded-4">
           {% if city.image %}
             <img src="{{ city.image.url }}" alt="{{ city.name }}" class="card-img-top rounded-top" style="height: 220px; object-fit: cover;">
           {% endif %}
           <div class="card-body text-center">
-            <h5 class="card-title fw-semibold text-dark">{{ city.name }}</h5>
+            <h5 class="card-title fw-semibold text-dark city-name">{{ city.name }}</h5>
             <a href="{% url 'destination_list' city=city.name %}" class="btn btn-outline-primary mt-3 px-4 fw-semibold btn-hover-scale">Explore {{ city.name }}</a>
           </div>
         </div>
@@ -35,16 +54,21 @@
   </div>
 </section>
 
-<!-- ========== DESTINATIONS LISTING ========== -->
+<!-- ========== DESTINATION FILTER + LISTING ========== -->
 <section class="container py-5 bg-light rounded-4 shadow-sm">
-  <h2 class="text-center fw-bold mb-5 text-secondary">Explore Places</h2>
-  <div class="row g-4">
+  <h2 class="text-center fw-bold mb-4 text-secondary">Explore Places</h2>
+
+  <div class="mb-4 text-center">
+    <input type="text" id="destSearch" class="form-control form-control-lg w-75 mx-auto" placeholder="Search for a destination...">
+  </div>
+
+  <div class="row g-4" id="destList">
     {% for dest in dests %}
-      <div class="col-lg-4 col-md-6">
-        <div class="card h-100 border-0 shadow-sm destination-card hover-scale rounded-4">
+      <div class="col-lg-4 col-md-6 dest-card-container">
+        <div class="card h-100 border border-light-subtle shadow-sm destination-card hover-scale rounded-4">
           <img src="{{ dest.img1.url }}" alt="{{ dest.name }}" class="card-img-top rounded-top" style="height: 240px; object-fit: cover;">
           <div class="card-body text-center">
-            <h5 class="card-title fw-semibold text-dark">{{ dest.name }}</h5>
+            <h5 class="card-title fw-semibold text-dark dest-name">{{ dest.name }}</h5>
             <a href="{% url 'destination_details' destination_name=dest.name %}" class="btn btn-primary mt-3 px-4 fw-semibold btn-hover-scale">Explore {{ dest.name }}</a>
           </div>
         </div>
@@ -58,7 +82,7 @@
   <h2 class="text-center fw-bold mb-4 text-secondary">Recommended For You</h2>
   <div class="row justify-content-center">
     <div class="col-lg-7 col-md-9">
-      <form action="{% url 'recommendations' %}" method="post" class="d-flex gap-3 flex-column flex-sm-row align-items-center shadow p-4 rounded-3 border">
+      <form action="{% url 'recommendations' %}" method="post" class="d-flex gap-3 flex-column flex-sm-row align-items-center shadow p-4 rounded-3 border border-light-subtle bg-white">
         {% csrf_token %}
         <input
           type="text"
@@ -75,7 +99,7 @@
 </section>
 
 <!-- ========== NEWSLETTER ========== -->
-<section class="py-5 position-relative overflow-hidden" style="background-color: #0b4a85;">
+<section class="py-5 position-relative overflow-hidden" style="background: linear-gradient(90deg, #0077b6, #00b4d8);">
   <div class="container text-white">
     <div class="row align-items-center">
       <div class="col-md-5 mb-4 mb-md-0">
@@ -104,12 +128,11 @@
       </div>
     </div>
   </div>
-  <div class="position-absolute top-0 start-0 w-100 h-100" style="background: url('/static/images/newsletter-bg.svg') no-repeat center / contain; opacity: 0.1; pointer-events: none;"></div>
+  <div class="position-absolute top-0 start-0 w-100 h-100" style="background: url('/static/images/newsletter-bg.svg') no-repeat bottom right / contain; opacity: 0.03; pointer-events: none;"></div>
 </section>
 
-<!-- ========== STYLES ========== -->
+<!-- ========== STYLES & SCRIPT ========== -->
 <style>
-  /* Gradient animated heading */
   .gradient-text {
     background: linear-gradient(90deg, #ff6a00, #ee0979, #00c9ff, #92fe9d);
     -webkit-background-clip: text;
@@ -125,7 +148,6 @@
     100% { background-position: 0% 50%; }
   }
 
-  /* Entrance animations */
   .animate-fade-in {
     opacity: 0;
     animation: fadeIn 2s ease forwards;
@@ -148,7 +170,6 @@
     }
   }
 
-  /* Hover scale effect */
   .hover-scale {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
@@ -170,6 +191,30 @@
     cursor: pointer;
   }
 </style>
+
+<script>
+  // City filter script
+  document.getElementById("citySearch").addEventListener("input", function () {
+    const searchValue = this.value.toLowerCase();
+    const cards = document.querySelectorAll(".city-card-container");
+
+    cards.forEach(card => {
+      const cityName = card.querySelector(".city-name").textContent.toLowerCase();
+      card.style.display = cityName.includes(searchValue) ? "block" : "none";
+    });
+  });
+
+  // Destination filter script
+  document.getElementById("destSearch").addEventListener("input", function () {
+    const searchValue = this.value.toLowerCase();
+    const cards = document.querySelectorAll(".dest-card-container");
+
+    cards.forEach(card => {
+      const destName = card.querySelector(".dest-name").textContent.toLowerCase();
+      card.style.display = destName.includes(searchValue) ? "block" : "none";
+    });
+  });
+</script>
 
 <div style="margin-bottom: 50px;"></div>
 
